@@ -1,10 +1,28 @@
 package com.isikef.prm.entities;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+// Product entity representing a product in the system
+@Table(name = "products")
 public class Product {
-    public Long id;
-    public String name;
-    public String description;
-    public Double price;
-    public ProductCategory category;
-    public int stockQuantity;
+    @Id
+    @Column(name = "id",nullable = false)
+    private Long idProduct;
+    @Column(name = "name",nullable = false, length = 100, unique = true)
+    private String name;
+    private String description;
+    private double price;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category",nullable = false)
+    private ProductCategory category;
+    private int stockQuantity;
 }
