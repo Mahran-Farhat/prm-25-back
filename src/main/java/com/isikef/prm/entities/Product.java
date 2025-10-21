@@ -10,23 +10,26 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-// Product entity representing a product in the system
 @Table(name = "products")
 public class Product {
     @Id
     @Column(name = "id",nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduct;
+
     @Column(name = "name",nullable = false, length = 100, unique = true)
     private String name;
+
     @Column(columnDefinition = "TEXT")
     private String description;
+
     private double price;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "category",nullable = false)
+    @Column(name = "category")
     private ProductCategory category;
+
     private int stockQuantity;
 
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
