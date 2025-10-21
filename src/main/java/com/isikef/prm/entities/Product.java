@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,10 +21,14 @@ public class Product {
     private Long idProduct;
     @Column(name = "name",nullable = false, length = 100, unique = true)
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private double price;
     @Enumerated(EnumType.STRING)
     @Column(name = "category",nullable = false)
     private ProductCategory category;
     private int stockQuantity;
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
+    private List<Comment> comments;
 }
