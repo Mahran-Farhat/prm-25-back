@@ -13,6 +13,7 @@ public class ProductDto {
     private final Long id;
     private final String name;
     private final String category;
+    private final String description;
     private final double price;
     private final int quantity;
 
@@ -20,6 +21,7 @@ public class ProductDto {
         this.id= product.getIdProduct();
         this.name = product.getName();
         this.category = product.getCategory().name();
+        this.description = product.getDescription();
         this.price = product.getPrice();
         this.quantity = product.getStockQuantity();
     }

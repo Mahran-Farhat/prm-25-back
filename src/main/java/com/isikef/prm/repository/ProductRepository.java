@@ -18,11 +18,11 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     public int countByCategory(ProductCategory productCategory);
 
-    @Query(value = "SELECT p from Product p where p.category == category",nativeQuery = false)
+    @Query(value = "SELECT p from Product p where p.category = :category",nativeQuery = false)
     public int countProductsCategoryUsingJPQL(@Param("category") ProductCategory category);
 
 
-    @Query(value = "SELECT p from products p where p.category == ?1",nativeQuery = true)
+    @Query(value = "SELECT p from products p where p.category = ?1",nativeQuery = true)
     public int countProductsCategoryUsingNative(ProductCategory category);
 
 }
