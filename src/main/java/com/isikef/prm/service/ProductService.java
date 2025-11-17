@@ -6,6 +6,7 @@ import com.isikef.prm.exceptions.MissingEntityException;
 import com.isikef.prm.forms.PageParams;
 import com.isikef.prm.forms.ProductForm;
 import com.isikef.prm.forms.ProductSearchForm;
+import com.isikef.prm.forms.SortedPage;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -18,5 +19,5 @@ public interface ProductService {
     public void deleteProduct(Long id);
     public Product updateProduct(Long id, ProductForm form) throws MissingEntityException;
     public List<Product> searchByCategoryAndName(ProductSearchForm form);
-    public Page<Product> paginatedProducts(PageParams params);
+    public Page<Product> paginatedProducts(SortedPage params);
 }

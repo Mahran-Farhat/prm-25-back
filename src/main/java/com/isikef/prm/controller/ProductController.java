@@ -3,9 +3,8 @@ package com.isikef.prm.controller;
 import com.isikef.prm.dto.ProductDto;
 import com.isikef.prm.entities.Product;
 import com.isikef.prm.exceptions.MissingEntityException;
-import com.isikef.prm.forms.PageParams;
-import com.isikef.prm.forms.ProductForm;
-import com.isikef.prm.forms.ProductSearchForm;
+import com.isikef.prm.forms.*;
+import com.isikef.prm.response.AppResponse;
 import com.isikef.prm.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -18,6 +17,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,17 +59,15 @@ public class ProductController {
     }
 
     @GetMapping(value = "/getbypath/{id}")
-    public ProductDto getProductByIdPath(@PathVariable(name = "id") Long id) throws MissingEntityException {
+    public ResponseEntity getProductByIdPath(@PathVariable(name = "id") Long id) throws MissingEntityException {
         Product p =  productService.getProductById(id);
-        return ProductDto.of(p);
+        return AppResponse.success(null,ProductDto.of(p));
     }
 
     @DeleteMapping
-    public Map<String, Boolean> deleteProduct(@RequestParam Long id) {
+    public ResponseEntity deleteProduct(@RequestParam Long id) {
         productService.deleteProduct(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", true);
-        return response;
+        return AppResponse.success("Product deleted successfully.");
     }
 
     @PutMapping
@@ -92,8 +90,9 @@ public class ProductController {
     }
 
     @GetMapping("/paginated")
-    public ResponseEntity getPaginatedProduct(@ModelAttribute PageParams form){
-        Page<Product> pProducts = productService.paginatedProducts(form);
-        return ResponseEntity.ok(pProducts);
+    public ResponseEntity getPaginatedProduct(@ModelAttribute SortedPage form){
+        Page<Product> page = productService.paginatedProducts(form);
+        List<ProductDto> products = ProductDto.of(page.getContent());
+        return AppResponse.success(null, products,page);
     }
 }
