@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
     public Page<Comment> findByProduct(Product product, Pageable pageable);
+    public Page<Comment> findByProductIdProduct(Long productId, Pageable pageable);
 }

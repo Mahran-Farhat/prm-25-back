@@ -29,7 +29,8 @@ public class CommentProductService {
 
     public Page<Comment> getCommentsByProduct(CommentSearchForm form) throws MissingEntityException {
         Product product = productService.getProductById(form.getProductId());
-        Page<Comment> commentPage = commentRepository.findByProduct(product,form.getPageable());
+        //Page<Comment> commentPage = commentRepository.findByProduct(product,form.getPageable());
+        Page<Comment> commentPage = commentRepository.findByProductIdProduct(form.getProductId(), form.getPageable());
         return commentPage;
     }
 }

@@ -1,10 +1,9 @@
 package com.isikef.prm.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -12,6 +11,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "products")
+@Where(clause = " disabled = false ")
 public class Product {
     @Id
     @Column(name = "id",nullable = false)
@@ -32,6 +32,8 @@ public class Product {
 
     private int stockQuantity;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
+    private boolean disabled;
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 }

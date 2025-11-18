@@ -4,6 +4,9 @@ import com.isikef.prm.entities.Comment;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 public class CommentDto {
@@ -17,5 +20,9 @@ public class CommentDto {
 
     public static CommentDto of(Comment comment){
         return  comment == null ? null: new CommentDto(comment);
+    }
+
+    public static List<CommentDto> of(List<Comment> comments){
+        return comments.stream().map(CommentDto::of).collect(Collectors.toList());
     }
 }

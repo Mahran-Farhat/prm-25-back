@@ -2,7 +2,6 @@ package com.isikef.prm.service;
 
 import com.isikef.prm.entities.Product;
 import com.isikef.prm.exceptions.MissingEntityException;
-import com.isikef.prm.forms.PageParams;
 import com.isikef.prm.forms.ProductForm;
 import com.isikef.prm.forms.ProductSearchForm;
 import com.isikef.prm.forms.SortedPage;
@@ -10,7 +9,10 @@ import com.isikef.prm.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,15 +48,31 @@ public class ProductServiceImpl implements ProductService{
         );
     }
 
-    @Override
-    public void deleteProduct(Long id) {
+    public void deleteProductFromDb(Long id) {
         try {
             Product product = getProductById(id);
             productRepository.delete(product);
         } catch (MissingEntityException e) {
-            log.info("NO product found with id :"+id);
+            log.info("NO product found with id :" + id);
         }
+    }
 
+    public void safeDeleteProduct(Long id) {
+        try {
+            Product product = getProductById(id);
+            product.setDisabled(true);
+            productRepository.saveAndFlush(product);
+        } catch (MissingEntityException e) {
+            log.info("NO product found with id :" + id);
+        }
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        // Delete product from database
+        //deleteProductFromDb(id);
+        // safe delete : disable the product
+       safeDeleteProduct(id);
     }
 
     @Override

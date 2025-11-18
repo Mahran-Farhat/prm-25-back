@@ -3,16 +3,18 @@ package com.isikef.prm.controller;
 import com.isikef.prm.dto.CommentDto;
 import com.isikef.prm.entities.Comment;
 import com.isikef.prm.exceptions.MissingEntityException;
+import com.isikef.prm.forms.CommentSearchForm;
 import com.isikef.prm.response.AppResponse;
 import com.isikef.prm.service.CommentProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/comment-product")
@@ -30,5 +32,12 @@ public class CommentProductController {
     ) throws MissingEntityException {
         Comment comment = commentProductService.addComment(productId, content);
         return AppResponse.success("Comment successfully added.", CommentDto.of(comment));
+    }
+
+    @GetMapping("/fetch")
+    public ResponseEntity getProductComments(@ModelAttribute CommentSearchForm form) throws MissingEntityException {
+        Page<Comment> page = commentProductService.getCommentsByProduct(form);
+        List<CommentDto> commentDtoList = CommentDto.of(page.getContent());
+        return AppResponse.success(null,commentDtoList,page);
     }
 }
